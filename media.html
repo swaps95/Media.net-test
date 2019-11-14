@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>MAILER</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <style>
+    .pra{
+      list-style: none;
+    }
+    #search {
+    width: 50%;
+    height: 3.4rem;
+    background: #f5f5f5;
+    outline: none;
+    border: none;
+/*    border-radius: 1.625rem;*/
+    padding: 0 3.5rem 0 1.5rem;
+    font-size: 14px;
+      margin-left: -5px;
+      vertical-align: middle;
+  
+    }
+    .search{
+    display: inline-block;
+    max-width: 100%;
+    margin-bottom: 0px;
+    font-weight: 700;
+    background-color: #2348b1;
+    padding: 0.7rem 3rem;
+    vertical-align: middle;
+    color: white;
+    }
+    
+    .sub{
+    vertical-align: middle;
+    background: whitesmoke;
+    border: none;
+    margin-left: -35px;
+    width: 2%;
+    }
+    .search_query{
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .usrinfo{
+      text-align: center;
+    }
+    #form{
+      margin-bottom: 30px;
+    }
+    th{
+      font-weight: 900;
+    }
+    tr:nth-child(even) {background-color: #f2f2f2;}
+    td{
+      font-weight: 600;
+      vertical-align: middle !important;
+    
+    }
+    td label span{font-weight: 600;}
+    input[type='checkbox'] {
+      font-size: 20px;
+    }
+    .warning{
+      display: none;
+      color: #ff3f3f;
+      font-weight: 900;
+      font-size: 18px;
+      padding: 10px 0;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h2>Mail control: input</h2>
+  <p>The form below contains two input elements; one of type text and one of type password:</p>
+  <form id="form">
+    <div class="form-group">
+      <label for="usr">Email:</label>
+      <input type="text" class="form-control" name="user" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2, 4}$" id="usr">
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+  <div>
+    <span class="warning"> Email is already present </span>
+  </div>
+    <div class="search_query"> 
+       <label for="search" class="search">Name</label>
+       <input  type="text" name="searchQueryInput" id="search" placeholder="Search" value="">
+       <button type="submit" class="sub"><i class="fa fa-search"></i></button>
+     </div>
+
+   <table class="table">
+    <thead>
+      <tr>
+        <th>Firstname</th>
+        <th>Email</th>
+        <th>Delete</th>
+      </tr>
+    </thead>
+    <tbody id="tbodys">
+
+    </tbody>
+  </table>
+  <ul id="dlLIST"></ul>
+  
+</div>
+<script>
+var SubmitArr=[];
+    var count=-1;
+
+  function logSubmit(event) {
+
+  const form = document.getElementById('form').elements.user;
+    if(!SubmitArr.includes(form.value)){
+      console.log("duplicate")
+    
+  const forms= document.getElementById('tbodys');
+    var row = forms.insertRow(0);
+    var cell1 = row.insertCell(0);
+    var cell2 = row.insertCell(1);
+    var cell3 = row.insertCell(2);
+    ++count;
+    cell1.innerHTML = `<div class='checkbox' id='ch-${count}'><label><input type='checkbox' value=''>checkEmail</label></div>`;
+    cell2.innerHTML = form.value;
+    cell3.innerHTML = `<button class='btn' id='gm-${count}' onclick='getFormId()'><i class='fa fa-trash' id='gm-${count}'></i></button>`;
+    SubmitArr.push(form.value)
+    }
+
+      event.preventDefault();
+
+
+}
+function getFormId(){
+  var id=event.target.id;
+  var docID = document.getElementById(id).parentNode.parentNode;
+  var docChildren=docID.children;
+  docID.parentNode.removeChild(docID);
+  var index = SubmitArr.indexOf(docChildren[1].innerHTML);
+    if (index > -1) {
+      SubmitArr.splice(index, 1);
+    }
+  
+  console.log(SubmitArr)
+}
+function seacrFill(){
+  console.log(event.target.value)
+   var tb = document.querySelector("tbody");
+   var tr= tb.getElementsByTagName('tr');
+  for(i = 0; i < SubmitArr.length; i++){
+   var a=tr[i].getElementsByTagName("td")[1].innerHTML;
+    console.log(a)
+    if (a.indexOf(event.target.value) > -1) {
+        tr[i].style.display = "";
+    }
+
+    else {
+        tr[i].style.display = "none";
+    }
+  }
+
+  
+}
+function dpList(){
+    const form = document.getElementById('form').elements.user;
+    var para = document.createElement("li");
+    var node = document.createTextNode(form.value);
+    para.appendChild(node);
+    var element = document.getElementById("dlLIST");
+    element.appendChild(para)
+    para.className = "pra";
+    event.preventDefault();
+  
+}
+
+
+const form = document.getElementById('form');
+//form.addEventListener('submit', dpList);
+form.addEventListener('submit', logSubmit);
+search.addEventListener('keyup', seacrFill);
+
+
+
+</script>
+</body>
+</html>
